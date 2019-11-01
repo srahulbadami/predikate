@@ -9,6 +9,8 @@ from sklearn.linear_model import SGDClassifier
 import string
 from nltk.corpus import stopwords
 
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse,HttpResponse
 
 def text_process(mess):
 	"""
@@ -25,31 +27,27 @@ def text_process(mess):
 	
 	# Now just remove any stopwords
 	return [word for word in nopunc.split() if word.lower() not in stopwords.words('english')]
-	
-def predict():
+@csrf_exempt
+def predict(request):
+	if request.method == 'POST':
+		messages1 = request.POST['parag']
+		with open('website/models/emotion_detect_model.pkl', 'rb') as fin:
+		  bow_transformer, emotion_detect_model = cPickle.load(fin)
 
-	messages1 = pd.read_csv('website/input/op.tsv', sep='\t',
-							   names=["id", "message1"])
-
-	with open('website/models/emotion_detect_model.pkl', 'rb') as fin:
-	  bow_transformer, emotion_detect_model = cPickle.load(fin)
-
-	# fid = open('', 'rb')
-	# emotion_detect_model = cPickle.load(fid)
+		# fid = open('', 'rb')
+		# emotion_detect_model = cPickle.load(fid)
 
 
-	messages_bow_test = bow_transformer.transform(messages1['message1'].values.astype('U'))
+		messages_bow_test = bow_transformer.transform((messages1.split('.')))
 
 
-	tfidf_transformer = TfidfTransformer()
+		tfidf_transformer = TfidfTransformer()
 
-	messages_tfidf_test = tfidf_transformer.fit_transform(messages_bow_test)
+		messages_tfidf_test = tfidf_transformer.fit_transform(messages_bow_test)
 
-	all_predictions = emotion_detect_model.predict(messages_tfidf_test)
-
-	numbers = all_predictions.tolist()
-	b=sorted(numbers, key=Counter(numbers).get, reverse=True)
-	return b[0]
+		all_predictions = emotion_detect_model.predict(messages_tfidf_test)
+		print(all_predictions)
+		return HttpResponse(all_predictions)
 
 
 def train(request):
