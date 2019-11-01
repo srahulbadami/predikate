@@ -22,8 +22,8 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('predict/', views.predict,name='predict'),
-    path('train/', views.train,name='train'),
+    path('fakenews_train/', views.fakenews_train,name='fakenews_train'),
+    path('fakenews_predict/', views.fakenews_predict,name='fakenews_predict'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
