@@ -10,6 +10,12 @@ django = "*"
 pandas = "*"
 nltk = "*"
 sklearn = "*"
+djangorestframework = "*"
+django-filter = "*"
+django-grappelli = "*"
+selenium = "*"
+requests = "*"
+beautifulsoup4 = "*"
 
 [requires]
 python_version = "3.6"
