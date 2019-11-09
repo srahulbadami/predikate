@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+{% block content %}
+
+				<section id="banner">
+					<header>
+						<h2>Predictor :  <strong>{{name}}</strong></h2>
+						<p>
+							A (free) responsive site template by <a href="http://html5up.net">HTML5 UP</a>.
+							Built with HTML5/CSS3 and released under the <a href="http://html5up.net/license">CCA</a> license.
+						</p>
+					</header>
+				</section>
+
+			<!-- Carousel -->
+
+				<div class="wrapper style2">
+					{% if type == 'fakenews' %}
+
+					<article id="main" class="container special">
+
+						<a href="#" class="image featured"><img src="{% static "images/pic06.jpg" %}" alt="" /></a>
+						<header>
+
+					<a name="fakenews" />
+							<h2><a href="#">Fake News Prediction</a></h2>
+							<p>
+								<form> 
+									
+									<textarea  id="data" name="data" rows="10" cols="30">{{data}}</textarea><br/>
+							<a href="#fakenews" class="fakenewsbutton button">Submit</a>
+								</form>
+							</p>The Result is : 
+							<p id="message"></p>
+						</header>
+						<p>
+							<b>How this works ?</b>
+						</p>
+						<footer>
+							<a href="#" class="button">Continue Reading</a>
+						</footer>
+					</article>
+					{% endif %}
+				</div>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript">
+    $('.fakenewsbutton').click(function(){
+    var catid;
+    catid = $('textarea[name="data"]').val();
+    $.ajax(
+    {
+        type:"POST",
+        url: "/predictor/",
+        data:{
+                 type: 'fakenews',
+                 csrfmiddlewaretoken: '{{ csrf_token }}',
+                 data: catid
+        },
+        success: function( data ) 
+        {
+            $( '#message' ).text(data);
+            $( '#result' ).text(data);
+            $message = $message;
+        }
+     })
+});
+</script>
+
+{% endblock %}

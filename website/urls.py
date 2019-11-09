@@ -21,8 +21,13 @@ from django.conf import settings
 from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('fakenews_train/', views.fakenews_train,name='fakenews_train'),
+    path('', views.index, name='index'),
+    path('accounts/login/', views.user_login, name='user_login'),
+    path('predictor/', views.predictor, name='predictor'),
+    path('train/', views.train, name='train'),
+    path('accounts/register/', views.register, name='register'),
+    path('accounts/logout/', views.user_logout, name='user_logout'),
+    path('fakenews_train/', views.fakenews_datacollect,name='fakenews_datacollect'),
     path('fakenews_predict/', views.fakenews_predict,name='fakenews_predict'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
