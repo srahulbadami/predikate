@@ -34,7 +34,7 @@
                 <div class="card-heading"></div>
                 <div class="card-body">
                     <h2 class="title">Registration Info</h2>
-                    <form method="POST" action="/register/"> 
+                    <form method="POST" action="/accounts/register/"> 
 					{% csrf_token %}
                     {% for field in form %}
                      <div class="input-group">

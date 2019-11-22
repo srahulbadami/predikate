@@ -121,8 +121,12 @@ class User(AbstractBaseUser):
 
 class CustomModels(models.Model):
     name = models.CharField(max_length=255, blank=False, null=False)
+    model_used = models.CharField(max_length=255, blank=False, null=False)
+    model_used_name = models.CharField(max_length=255, blank=False, null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    upload = models.FileField(upload_to ='datasets/%Y/%m/%d/', validators=[FileExtensionValidator(allowed_extensions=['csv','tsv'])]) 
-    model = models.CharField(max_length=255, blank=True, null=True,)
+    accuracy = models.FloatField(default=0.00)
+    upload = models.FileField(upload_to ='data/datasets/%Y/%m/%d/', validators=[FileExtensionValidator(allowed_extensions=['csv','tsv'])]) 
+    cus_model = models.FileField(upload_to ='data/models/%Y/%m/%d/', validators=[FileExtensionValidator(allowed_extensions=['csv','tsv'])]) 
+    temp_data = models.FileField(upload_to ='data/tempdata/%Y/%m/%d/', validators=[FileExtensionValidator(allowed_extensions=['csv','tsv'])]) 
     timestamp = models.DateTimeField(auto_now_add=True)
     custom_url = models.CharField(max_length=255, blank=False, null=False)

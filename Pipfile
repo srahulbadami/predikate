@@ -16,6 +16,8 @@ django-grappelli = "*"
 selenium = "*"
 requests = "*"
 beautifulsoup4 = "*"
+django-sendfile = "*"
+django-private-storage = "*"
 
 [requires]
 python_version = "3.6"

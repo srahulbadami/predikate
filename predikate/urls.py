@@ -15,10 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from website import views
+import website.views
+
+handler404 = website.views.error_404
+handler500 = website.views.error_500
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path('', include('website.urls')),
 ]
+
