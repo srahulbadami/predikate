@@ -19,16 +19,22 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.conf import settings
 from . import views
+import private_storage.urls
+
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('accounts/login/', views.user_login, name='user_login'),
     path('predictor/', views.predictor, name='predictor'),
     path('train/', views.train, name='train'),
+    path('download/', views.download, name='download'),
+    path('custommodels/', views.custommodels, name='custommodels'),
     path('accounts/register/', views.register, name='register'),
     path('accounts/logout/', views.user_logout, name='user_logout'),
     path('fakenews_train/', views.fakenews_datacollect,name='fakenews_datacollect'),
     path('fakenews_predict/', views.fakenews_predict,name='fakenews_predict'),
+    url('^private-media/', include(private_storage.urls)),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+ # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

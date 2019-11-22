@@ -27,13 +27,12 @@ SECRET_KEY = '*i!#d%r-lqh-2)wx)vtj8nmbbrfz#kdx=c20lrr&r6g+03-6k)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -126,3 +125,5 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+SENDFILE_BACKEND = 'sendfile.backends.simple'
+SENDFILE_URL = '/private'

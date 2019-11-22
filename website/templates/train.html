@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% block content %}
-
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 	<script src="{% static "js/modeluploader.js" %}" ></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	
 
 				<section id="banner">
 					<header>
@@ -156,6 +155,27 @@
 							<h2><a href="#">Upload Data</a></h2>
 							<p>
 								<form id="upload_form" action="#upload" enctype="multipart/form-data" method="POST">
+									<fieldset>
+  <div style="overflow-x:auto;"><div class="selectclass" ><table class="model_table">
+						<tr>
+  											{% for field in data %}
+											
+					<td><label class="model">
+											  
+
+												<div class="w3-card-4">
+													<input type="radio" name="type" value="{{field.id}}" checked="checked">
+												    <img src="https://www.w3schools.com/w3css/img_avatar5.png" alt="Person" style="width:100%">
+												    <div class="w3-container">
+												    	<h4 wrap="wrap"><b>{{field.model}}</b></h4>
+												    </div>
+												  </div>
+											  <input type="hidden" id="modelname" name="modelname" value="{{field.model}}">
+											  
+											</label></td>
+					
+										{% endfor %}</tr></table></div>
+									</div></fieldset>
 									{% csrf_token %}
 									<input type="text" placeholder="Give a Name for your Model" id="name" name="name" > 
 									<input type="file" name="myfile">
@@ -167,9 +187,76 @@
     0%
   </div>
 						</header>
-						
+				
+					
+				<div style="overflow-x:auto;">
   <table id="records_table"></table>
+</div>
+ 
 					</article>
 				</div>
 
+<style type="text/css">
+	table {
+  border-collapse: collapse;
+}
+
+table, td, th {
+  border: 1px solid black;
+  max-width: :300px;
+}
+tr:nth-child(even){background-color: #f2f2f2}
+.model_table {
+    border: 0px;
+}
+.model_table tr {
+    border: 0px;
+}
+.model_table td {
+    border: 0px;
+}
+[type=radio] { 
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* IMAGE STYLES */
+[type=radio] + img {
+  cursor: pointer;
+  margin: 0px 0px 0px 0px;
+}
+
+/* CHECKED STYLES */
+[type=radio]:checked + img {
+  outline: 5px solid #f00;
+}
+fieldset {
+  overflow: hidden
+}
+
+.selectclass {
+  float: left;
+  clear: none;
+}
+
+label {
+  float: left;
+  clear: none;
+  display: block;
+  padding: 2px 1em 1em 2px;
+  margin: 0 0 0 0;
+}
+.model{
+	height: 125px;
+	width: 250px;
+	margin-bottom: 200px;
+  border-radius: 5px;
+  padding:0.01em 16px
+
+}
+.w3-card-4,.w3-hover-shadow:hover{box-shadow:0 4px 10px 0 rgba(0,0,0,0.2),0 4px 20px 0 rgba(0,0,0,0.19)}
+.w3-container,.w3-panel{padding:0.01em 16px}.w3-panel{margin-top:16px;margin-bottom:16px}
+</style>
 {% endblock %}

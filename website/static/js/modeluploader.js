@@ -34,22 +34,32 @@ $(document).ready(function() {
             processData : false,
             contentType : false,
             success : function(data) {
+                console.log(data)
                 response = JSON.parse(data)
                 var trHTML = '';
+                var flag=1;
                 $.each(response, function (i, item) {
                     obj=item
-                    trHTML += '<tr>'
+                    if(flag==1)
+                        trHTML += ' <thead><tr">'
+                    else
+                        trHTML += '<tbody"><tr>'
                     for (var key in obj) {
                       if (obj.hasOwnProperty(key)) {
                         var val = obj[key];
-                        console.log(val);
                         trHTML += '<td>' + val + '</td>';
+
                       }
                     }
-                    trHTML += '</tr>';
+                    if(flag==1)
+                        trHTML += '</tr></thead>';
+                    else
+ 
+                        trHTML += '</tr></tbody>';
+                    flag=0;
                 });
+                trHTML += '<tr><td colspan="100"><b>These are some sample data from your dataset. Please Move to Your Models Section for your trained Model.</td></tr></b>';
                 $('#records_table').append(trHTML);
-                    }
         });
 
     });
