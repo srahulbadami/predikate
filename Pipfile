@@ -18,6 +18,9 @@ requests = "*"
 beautifulsoup4 = "*"
 django-sendfile = "*"
 django-private-storage = "*"
+django-background-tasks = "*"
+channels = "*"
+channels-redis = "*"
 
 [requires]
 python_version = "3.6"

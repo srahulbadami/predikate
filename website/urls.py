@@ -27,6 +27,7 @@ urlpatterns = [
     path('accounts/login/', views.user_login, name='user_login'),
     path('predictor/', views.predictor, name='predictor'),
     path('train/', views.train, name='train'),
+    path('logs/', views.logs, name='logs'),
     path('download/', views.download, name='download'),
     path('custommodels/', views.custommodels, name='custommodels'),
     path('accounts/register/', views.register, name='register'),

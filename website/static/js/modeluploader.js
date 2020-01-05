@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     $('form').on('submit', function(event) {
-
+        $('#records_table').empty()
         event.preventDefault();
 
         var formData = new FormData($('form')[0]);
@@ -16,7 +16,7 @@ $(document).ready(function() {
 
                         console.log('Bytes Loaded: ' + e.loaded);
                         console.log('Total Size: ' + e.total);
-                        console.log('Percentage Uploaded: ' + (e.loaded / e.total))
+                        console.log('Percentage Uploaded: ' + (e.loaded / e.total));
 
                         var percent = Math.round((e.loaded / e.total) * 100);
 
@@ -34,16 +34,16 @@ $(document).ready(function() {
             processData : false,
             contentType : false,
             success : function(data) {
-                console.log(data)
-                response = JSON.parse(data)
+                console.log(data);
+                response = JSON.parse(data);
                 var trHTML = '';
                 var flag=1;
                 $.each(response, function (i, item) {
-                    obj=item
+                    obj=item;
                     if(flag==1)
-                        trHTML += ' <thead><tr">'
+                        trHTML += ' <thead><tr">';
                     else
-                        trHTML += '<tbody"><tr>'
+                        trHTML += '<tbody"><tr>';
                     for (var key in obj) {
                       if (obj.hasOwnProperty(key)) {
                         var val = obj[key];
@@ -58,10 +58,12 @@ $(document).ready(function() {
                         trHTML += '</tr></tbody>';
                     flag=0;
                 });
-                trHTML += '<tr><td colspan="100"><b>These are some sample data from your dataset. Please Move to Your Models Section for your trained Model.</td></tr></b>';
+                trHTML += '<tr><td colspan="100"><b>These are some sample data from your dataset. Your Model is being Trained. Please Check your Email or Click the Notification Icon for More Details.</td></tr></b>';
                 $('#records_table').append(trHTML);
-        });
+        }
+      });
 
     });
 
 });
+ 

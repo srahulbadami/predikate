@@ -31,8 +31,18 @@ from datetime import datetime
 from sendfile import sendfile
 from wsgiref.util import FileWrapper
 import mimetypes
+from background_task import background
+
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 def index(request):
+	return render(request,'index.html')
+
+def logs(request):
+	if request.user.is_authenticated:
+		if request.user.is_admin:
+			return render(request,'logs.html')
 	return render(request,'index.html')
 
 def error_404(request,exception):
@@ -85,7 +95,6 @@ def custommodels(request):
 		user=request.user
 		models = CustomModels.objects.filter(user=user)
 		return render(request,'models.html',{'data': models})
-
 @login_required
 def train(request):
 	if request.method == 'POST':
@@ -100,7 +109,8 @@ def train(request):
 		model.model_used = type_model
 		model.model_used_name = a[int(type_model)-1]
 		model.save()
-		print("WORKING ON IT")
+		train_custom_model(model.id,type_model)
+		data = model.upload
 		f=open(model.upload.url.strip("/"))
 		f.seek(0)
 		ext = data.name.split(".")[-1]
@@ -121,17 +131,6 @@ def train(request):
 			i=i+1
 			if i==6:
 				break
-		# test = Pre_processing(model.upload.url.strip("/"))
-		# location= 'media/premodels/'+ datetime.now().strftime('%Y-%m-%d_%H-%M-%S')+'.pkl'
-		# with open(location, 'wb') as fid:
-		# 	cPickle.dump(test, fid)
-		location= 'premodels/'+ datetime.now().strftime('%Y-%m-%d_%H-%M-%S')+'.pkl'
-		model.pre_model = location
-		location2,acc = training(model.upload.url.strip("/"),type_model)
-		model.cus_model = location2
-		model.accuracy = acc
-		model.save()
-		print("WORKING Complete")
 		return JsonResponse(json.dumps(data_list),safe=False)
 	else:
 		data_list = []
@@ -180,6 +179,37 @@ def train(request):
 		data2['id'] = 11
 		data_list.append(data2)
 		return render(request,'train.html',{'data':data_list})
+
+
+@background(schedule=5)
+def train_custom_model(id_model,type_model):
+	model = CustomModels.objects.get(id=id_model)
+	channel_layer = get_channel_layer()
+	print(datetime.now())
+	async_to_sync(channel_layer.group_send)(
+		"gossip", {"type": "user.gossip",
+				   "event": "Started",
+				   "now": str(datetime.now()),
+				   "username": model.user.first_name + " " +model.user.last_name})
+	print("WORKING ON IT")
+	# test = Pre_processing(model.upload.url.strip("/"))
+	# location= 'media/premodels/'+ datetime.now().strftime('%Y-%m-%d_%H-%M-%S')+'.pkl'
+	# with open(location, 'wb') as fid:
+	# 	cPickle.dump(test, fid)
+	location= 'premodels/'+ datetime.now().strftime('%Y-%m-%d_%H-%M-%S')+'.pkl'
+	model.pre_model = location
+	location2,acc = training(model.upload.url.strip("/"),type_model)
+	model.cus_model = location2
+	model.accuracy = acc
+	model.save()
+	print("WORKING Complete")
+	channel_layer = get_channel_layer()
+	async_to_sync(channel_layer.group_send)(
+		"gossip", {"type": "user.gossip",
+				   "event": "Ended",
+				   "now": str(datetime.now()),
+				   "username": model.user.first_name + " " +model.user.last_name})
+	return("Done")
 
 def validate_file_extension(value):
 	from django.core.exceptions import ValidationError
@@ -384,7 +414,7 @@ def Pre_processing(data):
 			a.append(i)
 	if flag == 1 :
 		ct = ColumnTransformer(
-		    [('one_hot_encoder', OneHotEncoder(), a)],remainder='passthrough')
+			[('one_hot_encoder', OneHotEncoder(), a)],remainder='passthrough')
 		X = ct.fit_transform(X)
 
 	# #Standarisation of data
@@ -393,6 +423,8 @@ def Pre_processing(data):
 	# X = scaler.fit_transform(X)
 	
 	return(X)
+
+
 
 
 def training(location1,type_model):
@@ -428,11 +460,11 @@ def training(location1,type_model):
 		# onehotencoder = OneHotEncoder(categorical_features = a)
 		# X = onehotencoder.fit_transform(X).toarray()
 		ct = ColumnTransformer(
-		    [('one_hot_encoder', OneHotEncoder(), a)],remainder='passthrough')
+			[('one_hot_encoder', OneHotEncoder(), a)],remainder='passthrough')
 		X = ct.fit_transform(X)
-	if str(type(y[0][0]))=="<class 'str'>":
-		labelencoder_y = LabelEncoder()
-		y = labelencoder_y.fit_transform(y)
+	# if str(type(y[0][0]))=="<class 'str'>":
+	# 	labelencoder_y = LabelEncoder()
+	# 	y = labelencoder_y.fit_transform(y)
 
 	
 	# #Standarisation of data

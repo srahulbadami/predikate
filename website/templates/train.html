@@ -3,20 +3,20 @@
 {% block content %}
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 	<script src="{% static "js/modeluploader.js" %}" ></script>
-	
 
 				<section id="banner">
 					<header>
-						<h2>Hi. Looking for something to be  <strong>Trained ?</strong></h2>
+						<h2>Hi.
+								{% if user.is_authenticated %}
+								{{user.last_name}} 
+    							{% endif %}Looking for something to be  <strong>Trained ?</strong></h2>
 						<p>
-							A (free) responsive site template by <a href="http://html5up.net">HTML5 UP</a>.
-							Built with HTML5/CSS3 and released under the <a href="http://html5up.net/license">CCA</a> license.
+							Train custom machine learning models
 						</p>
 					</header>
 				</section>
-
 			<!-- Carousel -->
-				<section class="carousel">
+				<!-- <section class="carousel">
 					<div class="reel">
 						<article>
 							<a href="#" class="image featured"><img src="{% static "images/pic01.jpg" %}" alt="" /></a>
@@ -99,7 +99,7 @@
 						</article>
 
 					</div>
-				</section>
+				</section> -->
 
 			<!-- Features -->
 

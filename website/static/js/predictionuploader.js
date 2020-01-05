@@ -4,7 +4,6 @@ $(document).ready(function() {
         event.preventDefault();
         console.log($(this).attr("value"))
         var formData = new FormData($('form')[$(this).attr("value")]);
-        console.log(formData)
         $.ajax({
             xhr : function() {
                 var xhr = new window.XMLHttpRequest();
@@ -45,10 +44,11 @@ $(document).ready(function() {
        link.href = window.URL.createObjectURL(blob);
        link.download = fileName;
        link.click();
+       
     }
         });
 
-       $("#upload_form")[$(this).attr("value")].reset();
+       $('form')[$(this).attr("value")].reset();
     });
 
 });
